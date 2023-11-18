@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <string.h>
-
+#include <strings.h>
 #ifndef SIZE
-#define SIZE 100
+#define SIZE 5
 #endif
 
 typedef struct s_list
@@ -16,3 +16,4 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
+char	*ft_strjoin(char const *s1, char const *s2);

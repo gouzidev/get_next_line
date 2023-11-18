@@ -48,3 +48,42 @@ void ft_lstprint(t_list *head)
 		head = head->next;
 	}
 }
+
+
+static int	len(char const *s1)
+{
+	int	l;
+
+	l = 0;
+	while (s1[l])
+		l++;
+	return (l);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*output;
+	int		i;
+	int		j;
+
+	if (!s1 && !s2)
+		return (NULL);
+	if (s1 == NULL)
+		return (strdup(s2));
+	if (s2 == NULL)
+		return (strdup(s1));
+	output = (char *)malloc((len(s1) + len(s2) + 1) * sizeof(char));
+	if (output == NULL)
+		return (NULL);
+	i = 0;
+	while (i < len(s1))
+	{
+		output[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (j < len(s2))
+		output[i++] = s2[j++];
+	output[i] = '\0';
+	return (output);
+}
