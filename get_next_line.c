@@ -124,19 +124,21 @@ char *get_line(t_list *list)
 	return (line);
 }
 
-t_list* cleaner(t_list *list, t_list *new_node, char **rest)
+t_list* cleaner(t_list **list, t_list *new_node, char **rest)
 {
 	int i;
 	int j;
 	t_list *fixed_node;
+	t_list *head;
+	t_list *next;
 
 	fixed_node = malloc(sizeof(t_list));
 	fixed_node->str = malloc(ft_strlen(new_node->str, '_'));
-	
+	head = *list;
 	fixed_node->next = NULL;
-	while (list)
+	while (*list)
 	{
-		if (list == new_node)
+		if (*list == new_node)
 		{
 			i = -1;
 			while (++i >= 0 && new_node->str[i] && new_node->str[i] != '_')
@@ -148,14 +150,19 @@ t_list* cleaner(t_list *list, t_list *new_node, char **rest)
 			(*rest) = malloc(ft_strlen(&new_node->str[i], '_'));
 			j = 0;
 			while (new_node->str[i] && new_node->str[i] != '_')
-			{
-				printf("=> %c\n", new_node->str[i]);
 				(*rest)[j++] = new_node->str[i++];
-			}
 			(*rest)[j] = '\0';
+			while (head)
+			{
+				next = head->next;
+				free(head);
+				head = next;
+			}
+			printf("fixed -> %s\n", fixed_node->str);
+			*list = fixed_node;
 			return (fixed_node);
 		}
-		list = (list)->next;
+		*list = (*list)->next;
 	}
 }
 
@@ -177,7 +184,7 @@ char *get_next_line(int fd)
 		if (found_nl(buff))
 		{
 			line = get_line(list);
-			new_node = cleaner(list, new_node, &rest);
+			new_node = cleaner(&list, new_node, &rest);
 			printf("line ->  %s\n", line);
 			printf("rest ->  %s\n", rest);
 		}
