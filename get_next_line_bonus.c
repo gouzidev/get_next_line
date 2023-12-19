@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgouzi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 13:26:52 by sgouzi            #+#    #+#             */
-/*   Updated: 2023/12/02 09:52:54 by sgouzi           ###   ########.fr       */
+/*   Created: 2023/12/02 09:48:34 by sgouzi            #+#    #+#             */
+/*   Updated: 2023/12/02 09:49:01 by sgouzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	we_have_a_problem(int fd, char **str)
 {
@@ -18,8 +18,8 @@ int	we_have_a_problem(int fd, char **str)
 	{
 		if (str)
 		{
-			free(*str);
-			*str = NULL;
+			free(str[fd]);
+			str[fd] = NULL;
 		}
 		return (1);
 	}
@@ -29,28 +29,28 @@ int	we_have_a_problem(int fd, char **str)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*str;
+	static char	*str[1024];
 	char		*buff;
 	int			bytes;
 
-	if (we_have_a_problem(fd, &str))
+	if (we_have_a_problem(fd, str))
 		return (NULL);
 	buff = malloc(((size_t)BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
-		return (free(buff), free(str), NULL);
+		return (free(str[fd]), NULL);
 	bytes = 1;
-	while (!ft_strchr(str, '\n') && bytes != 0)
+	while (!ft_strchr(str[fd], '\n') && bytes != 0)
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
 		if (bytes == -1)
-			return (free(buff), free(str), NULL);
+			return (free(buff), free(str[fd]), NULL);
 		buff[bytes] = '\0';
-		str = ft_strjoin(str, buff);
+		str[fd] = ft_strjoin(str[fd], buff);
 	}
 	free(buff);
-	if (!str)
-		return (free(str), NULL);
-	line = ft_get_line(str);
-	str = get_rest(str);
+	if (!str[fd])
+		return (free(str[fd]), NULL);
+	line = ft_get_line(str[fd]);
+	str[fd] = get_rest(str[fd]);
 	return (line);
 }

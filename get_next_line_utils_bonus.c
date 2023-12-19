@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgouzi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 13:27:59 by sgouzi            #+#    #+#             */
-/*   Updated: 2023/11/29 13:28:00 by sgouzi           ###   ########.fr       */
+/*   Created: 2023/12/02 09:51:06 by sgouzi            #+#    #+#             */
+/*   Updated: 2023/12/02 09:51:07 by sgouzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(char *s)
 {
@@ -54,15 +54,14 @@ char	*ft_strjoin(char *str, char *buff)
 		str[0] = '\0';
 	}
 	if (!buff)
-		return (free(str), free(buff), NULL);
+		return (NULL);
 	res = malloc(sizeof(char) * ((ft_strlen(str) + ft_strlen(buff)) + 1));
 	if (res == NULL)
-		return (NULL);
+		return (free(str), free(buff), NULL);
 	i = -1;
 	j = 0;
-	if (str)
-		while (str[++i] != '\0')
-			res[i] = str[i];
+	while (str[++i] != '\0')
+		res[i] = str[i];
 	while (buff[j] != '\0')
 		res[i++] = buff[j++];
 	res[ft_strlen(str) + ft_strlen(buff)] = '\0';
@@ -84,7 +83,7 @@ char	*ft_get_line(char *str)
 		i++;
 	line = (char *)malloc(sizeof(char) * (i + 1));
 	if (!line)
-		return (free(str), NULL);
+		return (NULL);
 	i = -1;
 	while (++i >= 0 && str[i] && str[i] != '\n')
 		line[i] = str[i];
@@ -113,7 +112,7 @@ char	*get_rest(char *str)
 	}
 	buff = (char *)malloc(sizeof(char) * (ft_strlen(str) - i + 1));
 	if (!buff)
-		return (free(buff), free(str), NULL);
+		return (free(str), NULL);
 	i++;
 	j = 0;
 	while (str[i])
